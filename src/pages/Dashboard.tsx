@@ -6,7 +6,6 @@ import TransactionModal from '../components/TransactionModal'
 
 export default function Dashboard() {
   const [transactions, setTransactions] = useState<Transaction[]>([])
-  const [loading, setLoading] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   // These look for files in your "public" folder
@@ -18,7 +17,6 @@ export default function Dashboard() {
 
   const fetchTransactions = async () => {
     try {
-        setLoading(true)
         const { data } = await supabase
         .from('transactions')
         .select('*')
@@ -26,12 +24,11 @@ export default function Dashboard() {
         setTransactions(data || [])
     } catch (err) {
         console.error('Error fetching:', err)
-    } finally {
-        setLoading(false)
     }
   }
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchTransactions()
   }, [])
 

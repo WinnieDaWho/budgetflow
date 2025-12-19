@@ -1,29 +1,27 @@
 import Lottie from "lottie-react";
 import { useEffect, useState } from "react";
 
-const animationCache: Record<string, any> = {};
+type AnimationData = Record<string, unknown>;
+const animationCache: Record<string, AnimationData> = {};
 
 export default function Animation({ url, className }: { url: string; className?: string }) {
-  const [animationData, setAnimationData] = useState<any>(null);
+  const [animationData, setAnimationData] = useState<AnimationData | null>(() => animationCache[url] || null);
 
   useEffect(() => {
-    // 1. Check Cache
-    if (animationCache[url]) {
-      setAnimationData(animationCache[url]);
-      return;
-    }
+    // Skip if already cached
+    if (animationCache[url]) return;
 
-    // 2. Fetch safely (Local or Remote)
+    // Fetch safely (Local or Remote)
     fetch(url)
       .then((res) => {
         if (!res.ok) throw new Error("File not found");
         return res.json();
       })
-      .then((data) => {
+      .then((data: AnimationData) => {
         animationCache[url] = data;
         setAnimationData(data);
       })
-      .catch((err) => {
+      .catch(() => {
         console.warn(`Animation missing: ${url}`); // Log warning, don't crash
       });
   }, [url]);

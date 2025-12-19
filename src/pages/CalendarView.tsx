@@ -12,7 +12,7 @@ import {
   startOfWeek,
   subMonths,
 } from 'date-fns'
-import { ChevronLeft, ChevronRight, TrendingDown, TrendingUp } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { supabase, type Transaction } from '../lib/supabase'
 
 export default function CalendarView() {
